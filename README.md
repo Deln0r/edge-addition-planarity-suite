@@ -71,3 +71,4 @@ This project is licensed under a 3-clause BSD License appearing in [`LICENSE.TXT
 ## Related Works and Further Documentation
 
 There have been successful technology transfers of the implementation code and/or algorithms of this project into other projects. To see a list of the related projects and for further documentation about this project, please see the [project wiki](https://github.com/graph-algorithms/edge-addition-planarity-suite/wiki).
+
