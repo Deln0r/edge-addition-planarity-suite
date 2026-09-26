@@ -618,7 +618,7 @@ int _CompactEdgeStorage(graphP theGraph)
             int v = gp_GetNeighbor(theGraph, eLast);
             unsigned flagsOfLast = theGraph->E[eLast].flags;
             unsigned flagsOfLastTwin = theGraph->E[gp_GetTwin(theGraph, eLast)].flags;
-            int eMoved = NIL;
+            int e_u = NIL, e_v = NIL;
 
             if (gp_EdgeNotInUse(theGraph, eLast))
                 return NOTOK;
@@ -630,13 +630,18 @@ int _CompactEdgeStorage(graphP theGraph)
                 gp_DynamicAddEdge(theGraph, u, 0, v, 0) != OK)
                 return NOTOK;
 
-            eMoved = gp_GetTwin(theGraph, topHole);
+            // The zeroes in the parameterization of gp_DynamicAddEdge() mean
+            // we are guaranteed to find the new edge records for (u, v) as
+            // the first adjacency list elements (link[0]) of u and v.
+            e_u = gp_GetFirstEdge(theGraph, u);
+            e_v = gp_GetFirstEdge(theGraph, v);
 
-            if (gp_GetNeighbor(theGraph, eMoved) != v || gp_GetNeighbor(theGraph, topHole) != u)
-                return NOTOK;
+            // The flagsOfLast captured the flags of eLast, which is the
+            // edge record with neighbor value assigned to v, which is e_u.
+            theGraph->E[e_u].flags = flagsOfLast;
 
-            theGraph->E[eMoved].flags = flagsOfLast;
-            theGraph->E[topHole].flags = flagsOfLastTwin;
+            // And e_v is the twin
+            theGraph->E[e_v].flags = flagsOfLastTwin;
         }
     }
 
